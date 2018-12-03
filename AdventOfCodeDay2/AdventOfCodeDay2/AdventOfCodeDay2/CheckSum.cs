@@ -9,17 +9,25 @@ namespace AdventOfCodeDay2
 {
     class CheckSum
     {
-        /*private String[] alphabet = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
-            "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };*/
         private int threes;
         private int twos;
         private int checkSum;
+        private String correctID, otherID;
+        private List<String> IDs;
 
         public CheckSum()
         {
             threes = 0;
             twos = 0;
             checkSum = 0;
+            IDs = new List<String>();
+            correctID = "";
+            otherID = "";
+        }
+
+        public void AddList( String line )
+        {
+            IDs.Add(line);
         }
 
         public void Add( String line )
@@ -29,7 +37,7 @@ namespace AdventOfCodeDay2
             int total = 1;
             while( line.Length > 0 )
             {
-                total = 1;
+
                 if( two == true && three == true )
                 {
                     break;
@@ -44,10 +52,11 @@ namespace AdventOfCodeDay2
                     //Console.WriteLine("Part2: " + part2);
                     line = part1 + part2;
                     total++;
-                    //Console.WriteLine(total);
+                    //Console.WriteLine(line[0] + ": " + total );
                 }
                 else
                 {
+                    //Console.WriteLine(total);
                     line = line.Substring(1);
                     //Console.WriteLine("New line: " + line);
                     if( total == 2 )
@@ -61,6 +70,7 @@ namespace AdventOfCodeDay2
                     {
                         three = true;
                     }
+                    total = 1;
                 }
             }
 
@@ -77,6 +87,62 @@ namespace AdventOfCodeDay2
             Console.WriteLine("Two: " + twos + " Threes: " + threes);
         }
 
+        public void CalcID()
+        {
+            String temp = "";
+            bool found = false;
+            
+            for( int i = 0; i < IDs.Count - 1; i++ )
+            {
+                //Console.WriteLine(i);
+                int wrong = 0;
+                for( int j = i + 1; j < IDs.Count; j++ )
+                {
+                    wrong = 0;
+                    //Console.WriteLine(j);
+                    for( int k = 0; k < IDs[i].Length; k++ )
+                    {
+                        if( IDs[i][k] != IDs[j][k] )
+                        {
+                            wrong++;
+                            if( wrong > 1)
+                            {
+                                //Console.WriteLine(IDs[j][k]);
+                                break;
+                            }
+                        }
+                        
+                    }
+                    if( wrong == 1)
+                    {
+                        found = true;
+                        correctID = IDs[i];
+                        otherID = IDs[j];
+                        //Console.WriteLine(correctID);
+                        //Console.WriteLine(otherID);
+                        break;
+                    }
+                }
+
+                if( found == true )
+                {
+                    break;
+                }
+            }
+        }
+
+        public String GetID()
+        {
+            String temp = "";
+            for( int i = 0; i < correctID.Length; i++ )
+            {
+                if( correctID[i] == otherID[i] )
+                {
+                    temp += correctID[i];
+                }
+            }
+            return temp;
+        }
 
         public int GetCheckSum()
         {
@@ -92,13 +158,13 @@ namespace AdventOfCodeDay2
                 string line = null;
                 while ((line = s.ReadLine()) != null)
                 {
-                    //Console.WriteLine("Reading line");
-                    check.Add(line);
-                    Console.ReadLine();
+                    check.AddList(line);
                 }
                 s.Close();
             }
 
+            check.CalcID();
+            Console.WriteLine(check.GetID());
             //Console.WriteLine(check.GetCheckSum());
             Console.ReadLine();
         }
