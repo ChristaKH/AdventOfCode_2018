@@ -9,8 +9,8 @@ namespace AdventOfCodeDay2
 {
     class CheckSum
     {
-        private String[] alphabet = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
-            "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
+        /*private String[] alphabet = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
+            "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };*/
         private int threes;
         private int twos;
         private int checkSum;
@@ -26,36 +26,41 @@ namespace AdventOfCodeDay2
         {
             bool two = false;
             bool three = false;
-            int total;
-            String tempLine = line;
-            for( int i = 0; i < alphabet.Length; i++ )
+            int total = 1;
+            while( line.Length > 0 )
             {
-                Console.WriteLine(i);
+                total = 1;
                 if( two == true && three == true )
                 {
                     break;
                 }
-
-                tempLine = line;
-                total = 0;
-                while( tempLine.Contains( alphabet[i]) )
+                //Console.WriteLine("Chosen letter: " + line[0]);
+                if( line.LastIndexOf( line[0]) > 0 )
                 {
+
+                    String part1 = line.Substring(0, line.LastIndexOf(line[0]));
+                    //Console.WriteLine("Part 1: " + part1);
+                    String part2 = line.Substring((line.LastIndexOf(line[0]) + 1));
+                    //Console.WriteLine("Part2: " + part2);
+                    line = part1 + part2;
                     total++;
-                    if( tempLine.IndexOf( alphabet[i]) > 0 )
+                    //Console.WriteLine(total);
+                }
+                else
+                {
+                    line = line.Substring(1);
+                    //Console.WriteLine("New line: " + line);
+                    if( total == 2 )
                     {
-                        String s1 = tempLine.Substring(0, tempLine.IndexOf(alphabet[i]));
-                        String s2 = tempLine.Substring(tempLine.IndexOf(alphabet[i]) + 1);
-                        tempLine = s1 + s2;
+                        //Console.WriteLine("Entered ");
+                        two = true;
                     }
-                }
-
-                if( total == 2 )
-                {
-                    two = true;
-                }
-                if( total == 3 )
-                {
-                    three = false;
+                    //Console.WriteLine(total + " " + two );
+                    
+                    if( total == 3 )
+                    {
+                        three = true;
+                    }
                 }
             }
 
@@ -63,6 +68,7 @@ namespace AdventOfCodeDay2
             {
                 twos++;
             }
+
             if( three == true )
             {
                 threes++;
@@ -86,8 +92,9 @@ namespace AdventOfCodeDay2
                 string line = null;
                 while ((line = s.ReadLine()) != null)
                 {
-                    Console.WriteLine("Reading line");
+                    //Console.WriteLine("Reading line");
                     check.Add(line);
+                    Console.ReadLine();
                 }
                 s.Close();
             }
